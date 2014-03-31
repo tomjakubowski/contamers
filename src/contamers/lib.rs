@@ -2,4 +2,7 @@
 #[crate_type = "lib"];
 #[license = "MIT"];
 
+extern crate collections;
+
 pub mod list;
+pub mod strtrie;
