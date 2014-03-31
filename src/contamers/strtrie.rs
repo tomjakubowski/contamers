@@ -56,21 +56,19 @@ impl Node {
         }
     }
 
-    fn contains(&self, val: &str) -> bool{
+    fn contains(&self, val: &str) -> bool {
         match val.chars().next() {
             None => false,
             Some(c) => {
-                let children = &self.children;
-                if val.len() == 1 {
-                    match children.find(&c) {
-                        Some(ref node) => { node.is_terminal() },
-                        _ => false
-                    }
-                } else {
-                    match children.find(&c) {
-                        Some(ref node) => { node.contains(val.slice_from(1)) },
-                        _ => false
-                    }
+                match self.children.find(&c) {
+                    Some(ref node) => {
+                        if val.len() == 1 {
+                            node.is_terminal()
+                        } else {
+                            node.contains(val.slice_from(1))
+                        }
+                    },
+                    _ => false
                 }
             }
         }
