@@ -75,7 +75,7 @@ impl StrTrie {
         self.root.insert(val);
     }
 
-    pub fn contains(&mut self, val: &str) -> bool {
+    pub fn contains(&self, val: &str) -> bool {
         self.root.contains(val)
     }
 }
