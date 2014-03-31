@@ -39,39 +39,30 @@ impl Node {
     }
 
     fn insert(&mut self, val: &str) {
-        match val.chars().next() {
-            None => return,
-            Some(c) => {
-                let children = &mut self.children;
-                if val.len() == 1 {
-                    children.insert_or_update_with(c, ~Node::new_terminal(c), |&k, node| {
-                        node.value = Terminal(k);
-                    });
-                } else {
-                    children.find_or_insert_with(c, |&k| {
-                        ~Node::new_internal(k)
-                    }).insert(val.slice_from(1));
-                }
+        val.chars().next().map(|c| {
+            let children = &mut self.children;
+            if val.len() == 1 {
+                children.insert_or_update_with(c, ~Node::new_terminal(c), |&k, node| {
+                    node.value = Terminal(k);
+                });
+            } else {
+                children.find_or_insert_with(c, |&k| {
+                    ~Node::new_internal(k)
+                }).insert(val.slice_from(1));
             }
-        }
+        });
     }
 
     fn contains(&self, val: &str) -> bool {
-        match val.chars().next() {
-            None => false,
-            Some(c) => {
-                match self.children.find(&c) {
-                    Some(ref node) => {
-                        if val.len() == 1 {
-                            node.is_terminal()
-                        } else {
-                            node.contains(val.slice_from(1))
-                        }
-                    },
-                    _ => false
+        val.chars().next().and_then(|c| {
+            self.children.find(&c).map(|node| {
+                if val.len() == 1 {
+                    node.is_terminal()
+                } else {
+                    node.contains(val.slice_from(1))
                 }
-            }
-        }
+            })
+        }).unwrap_or(false)
     }
 }
 
