@@ -3,8 +3,9 @@
 #[license = "MIT"];
 
 extern crate contamers;
-
 use contamers::list;
+
+use std::fmt;
 
 #[deriving(Show)]
 enum Gender {
@@ -13,10 +14,19 @@ enum Gender {
     Porpoise
 }
 
-#[deriving(Show)]
 struct Person {
     gender: Option<Gender>,
     name: ~str
+}
+
+impl fmt::Show for Person {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let gender = match self.gender {
+            Some(ref gen) => format!("{}", gen),
+            None => ~"unknown"
+        };
+        write!(f.buf, "name: {}, gender: {}", self.name, gender)
+    }
 }
 
 fn with_angry_name(person: &Person) -> Person {
@@ -34,8 +44,9 @@ pub fn main() {
     let tom = Person { gender: Some(Male), name: ~"Tom" };
     let joe = Person { gender: Some(Porpoise), name: ~"Joe the Porpoise" };
     let ann = Person { gender: Some(Female), name: ~"Ann Veal" };
+    let mys = Person { gender: None, name: ~"Mystery" };
 
-    let a = [tom, joe, ann];
+    let a = [tom, joe, ann, mys];
     let persons: List<Person> = a.iter().map(with_angry_name).collect();
 
     println!("the people:");
