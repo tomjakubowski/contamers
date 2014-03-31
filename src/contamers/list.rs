@@ -99,11 +99,11 @@ mod test {
     fn test_from_iterator() {
         let vec = [1, 2, 3, 4];
 
-        let mut list: List<&int> = vec.iter().collect();
+        let mut list: List<int> = vec.iter().map(|&x| x).collect();
         assert_eq!(list.len(), 4);
 
         for i in vec.iter().rev() {
-            assert_eq!(list.pop(), Some(i));
+            assert_eq!(list.pop(), Some(*i));
         }
     }
 }
