@@ -10,11 +10,20 @@ struct Node<A> {
     value: A
 }
 
+pub struct Items<'a, A> {
+    priv head: &'a Link<A>,
+    priv nelem: uint
+}
+
 type Link<A> = Option<~Node<A>>;
 
 impl<A> List<A> {
     pub fn new() -> List<A> {
         List { head: None, length: 0 }
+    }
+
+    pub fn iter<'a>(&'a self) -> Items<'a, A> {
+        Items { head: &self.head, nelem: self.length }
     }
 }
 
@@ -67,6 +76,24 @@ impl<A> Container for List<A> {
     }
 }
 
+// the following impl is ``inspired'' by collections::dlist
+impl<'a, A> Iterator<&'a A> for Items<'a, A> {
+    fn next(&mut self) -> Option<&'a A> {
+        if self.nelem == 0 {
+            return None;
+        }
+        self.head.as_ref().map(|head| {
+            self.head = &head.next;
+            self.nelem -= 1;
+            &head.value
+        })
+    }
+
+    fn size_hint(&self) -> (uint, Option<uint>) {
+        (self.nelem, Some(self.nelem))
+    }
+}
+
 #[cfg(test)]
 mod test {
     use super::List;
@@ -105,5 +132,16 @@ mod test {
         for i in vec.iter().rev() {
             assert_eq!(list.pop(), Some(*i));
         }
+    }
+
+    #[test]
+    fn test_iterator() {
+        let mut list = List::new();
+        list.push(1);
+        list.push(2);
+        let mut it = list.iter();
+        assert_eq!(it.next().unwrap(), &2);
+        assert_eq!(it.next().unwrap(), &1);
+        assert_eq!(it.next(), None);
     }
 }

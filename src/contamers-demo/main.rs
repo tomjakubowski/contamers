@@ -36,7 +36,10 @@ pub fn main() {
     let ann = Person { gender: Some(Female), name: ~"Ann Veal" };
 
     let a = [tom, joe, ann];
-    let xs: List<Person> = a.iter().map(with_angry_name).collect();
+    let persons: List<Person> = a.iter().map(with_angry_name).collect();
 
-    println!("xs {}", xs);
+    println!("the people:");
+    for person in persons.iter() {
+        println!("{}", person);
+    }
 }
