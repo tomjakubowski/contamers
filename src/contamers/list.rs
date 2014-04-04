@@ -1,7 +1,7 @@
 #[deriving(Show)]
 pub struct List<A> {
-    priv head: Link<A>,
-    priv length: uint
+    head: Link<A>,
+    length: uint
 }
 
 #[deriving(Show)]
@@ -11,8 +11,8 @@ struct Node<A> {
 }
 
 pub struct Items<'a, A> {
-    priv head: &'a Link<A>,
-    priv nelem: uint
+    head: &'a Link<A>,
+    nelem: uint
 }
 
 type Link<A> = Option<~Node<A>>;
@@ -61,7 +61,7 @@ impl<A> List<A> {
 }
 
 impl<A> FromIterator<A> for List<A> {
-    fn from_iterator<T: Iterator<A>>(mut iterator: T) -> List<A> {
+    fn from_iter<T: Iterator<A>>(mut iterator: T) -> List<A> {
         let mut list: List<A> = List::new();
         for el in iterator {
             list.push(el);

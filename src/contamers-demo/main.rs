@@ -1,6 +1,6 @@
-#[crate_id = "contamers-demo#0.1.0"];
-#[crate_type = "bin"];
-#[license = "MIT"];
+#![crate_id = "contamers-demo#0.1.0"]
+#![crate_type = "bin"]
+#![license = "MIT"]
 
 extern crate contamers;
 use contamers::list;

@@ -17,7 +17,7 @@ struct Node {
 
 #[deriving(Show)]
 pub struct StrTrie {
-    priv root: Node
+    root: Node
 }
 
 impl Node {
